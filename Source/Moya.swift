@@ -294,7 +294,7 @@ public extension MoyaProvider {
     }
     
     public final class func DefaultRequestMapping(endpoint: Endpoint<Target>, closure: NSURLRequest -> Void) {
-        return closure(endpoint.urlRequest)
+        closure(endpoint.urlRequest)
     }
 
     public final class func DefaultAlamofireManager() -> Manager {
