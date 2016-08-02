@@ -34,7 +34,7 @@ public final class CancellableToken: Cancellable , CustomDebugStringConvertible 
         self.request = nil
     }
     
-    init(request : Request){
+    public init(request : Request){
         self.request = request
         self.cancelAction = {
             request.cancel()

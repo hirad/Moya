@@ -4,7 +4,7 @@ import Foundation
 public enum EndpointSampleResponse {
 
     /// The network returned a response, including status code and data.
-    case NetworkResponse(Int, NSData)
+    case NetworkResponse(Int, NSData, NSURLResponse?)
 
     /// The network failed to send the request, or failed to retrieve a response (eg a timeout).
     case NetworkError(NSError)

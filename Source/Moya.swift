@@ -290,7 +290,7 @@ public extension MoyaProvider {
     
     public final class func DefaultEndpointMapping(target: Target) -> Endpoint<Target> {
         let url = target.baseURL.URLByAppendingPathComponent(target.path).absoluteString
-        return Endpoint(URL: url, sampleResponseClosure: {.NetworkResponse(200, target.sampleData)}, method: target.method, parameters: target.parameters)
+        return Endpoint(URL: url, sampleResponseClosure: {.NetworkResponse(200, target.sampleData, nil)}, method: target.method, parameters: target.parameters)
     }
     
     public final class func DefaultRequestMapping(endpoint: Endpoint<Target>, closure: NSURLRequest -> Void) {
@@ -413,8 +413,8 @@ internal extension MoyaProvider {
             }
             
             switch endpoint.sampleResponseClosure() {
-            case .NetworkResponse(let statusCode, let data):
-                let response = Moya.Response(statusCode: statusCode, data: data, response: nil)
+            case .NetworkResponse(let statusCode, let data, let resp):
+                let response = Moya.Response(statusCode: statusCode, data: data, response: resp)
                 plugins.forEach { $0.didReceiveResponse(.Success(response), target: target) }
                 completion(result: .Success(response))
             case .NetworkError(let error):
@@ -457,7 +457,7 @@ internal struct CancellableWrapper: Cancellable {
     }
 }
 
-internal func decodeHTTPBody(nsData:NSData?) -> [String:String] {
+internal func decodeHTTPBody(nsData: NSData?) -> [String: String] {
     guard let data = nsData, let urlParams = String(data: data, encoding: NSUTF8StringEncoding)
         else { return [:] }
     
