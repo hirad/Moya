@@ -5,7 +5,7 @@ import Alamofire
 public enum EndpointSampleResponse {
 
     /// The network returned a response, including status code and data.
-    case networkResponse(Int, Data)
+    case networkResponse(Int, Data, URLResponse?)
 
     /// The network returned response which can be fully customized.
     case response(HTTPURLResponse, Data)

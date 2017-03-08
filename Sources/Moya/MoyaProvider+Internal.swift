@@ -131,8 +131,8 @@ public extension MoyaProvider {
             }
 
             switch endpoint.sampleResponseClosure() {
-            case .networkResponse(let statusCode, let data):
-                let response = Moya.Response(statusCode: statusCode, data: data, request: request, response: nil)
+            case .networkResponse(let statusCode, let data, let resp):
+                let response = Moya.Response(statusCode: statusCode, data: data, request: request, response: resp)
                 plugins.forEach { $0.didReceive(.success(response), target: target) }
                 completion(.success(response))
             case .response(let customResponse, let data):
