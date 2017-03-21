@@ -24,6 +24,7 @@ open class Endpoint<Target> {
     open let parameters: [String: Any]?
     open let parameterEncoding: Moya.ParameterEncoding
     open let httpHeaderFields: [String: String]?
+    open let task: Task
 
     /// Main initializer for `Endpoint`.
     public init(url: String,
@@ -31,7 +32,8 @@ open class Endpoint<Target> {
                 method: Moya.Method = Moya.Method.get,
                 parameters: [String: Any]? = nil,
                 parameterEncoding: Moya.ParameterEncoding = URLEncoding.default,
-                httpHeaderFields: [String: String]? = nil) {
+                httpHeaderFields: [String: String]? = nil,
+                task: Task = .request) {
 
         self.url = url
         self.sampleResponseClosure = sampleResponseClosure
@@ -39,6 +41,7 @@ open class Endpoint<Target> {
         self.parameters = parameters
         self.parameterEncoding = parameterEncoding
         self.httpHeaderFields = httpHeaderFields
+        self.task = task
     }
 
     /// Convenience method for creating a new `Endpoint` with the same properties as the receiver, but with added parameters.

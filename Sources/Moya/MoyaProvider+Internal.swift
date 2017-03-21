@@ -157,9 +157,18 @@ public extension MoyaProvider {
 private extension MoyaProvider {
     func sendUploadMultipart(_ target: Target, request: URLRequest, queue: DispatchQueue?, multipartBody: [MultipartFormData], progress: Moya.ProgressBlock? = nil, completion: @escaping Moya.Completion) -> CancellableWrapper {
         let cancellable = CancellableWrapper()
+        let endpoint = self.endpoint(target)
+        let bodyParts: [MultipartFormData]
+        print("endpoint: \(endpoint); task: \(endpoint.task) (target task: \(target.task))")
+        switch endpoint.task {
+        case .upload(.multipart(let parts)):
+            bodyParts = parts
+        default:
+            fatalError("invalid invocation of `sendUploadMultipart`")
+        }
 
         let multipartFormData: (RequestMultipartFormData) -> Void = { form in
-            for bodyPart in multipartBody {
+            for bodyPart in bodyParts {
                 switch bodyPart.provider {
                 case .data(let data):
                     self.append(data: data, bodyPart: bodyPart, to: form)
@@ -170,7 +179,7 @@ private extension MoyaProvider {
                 }
             }
 
-            if let parameters = target.parameters {
+            if let parameters = endpoint.parameters {
                 parameters
                     .flatMap { key, value in multipartQueryComponents(key, value) }
                     .forEach { key, value in
